@@ -13,6 +13,7 @@ public class RangeTest extends TestCase {
 	
 	private Range rangeObjectUnderTest;
 	private Range r1;
+	private Range r2;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -24,6 +25,7 @@ public class RangeTest extends TestCase {
 	@Before
 	protected void setUp() throws Exception {
 		r1 = new Range(-1.0,1.0);
+		r2 = new Range(-3,-1);
 		rangeObjectUnderTest = new Range(-1,1);
 	}
 
@@ -38,15 +40,63 @@ public class RangeTest extends TestCase {
 	}
 	
 	@Test
-	public void testGetUpperBound() {
-		assertEquals("getUpperBound: Did not return the expected output",1.0,r1.getUpperBound(),0.000000001d);
-		
+	public void testGetUpperBoundSucceedsWhenBothSamePositiveValues() {
+		Range t1 = new Range(5,5);
+		assertEquals("getUpperBound: Did not return the expected output",5,t1.getUpperBound(),0.000000001d);	
 	}
 	
 	@Test
-	public void testGetLowerBound() {
-		assertEquals("getLowerBound: Did not return the expected output",-1.0,r1.getLowerBound(),0.000000001d);
-		
+	public void testGetUpperBoundSucceedsWhenBothSameNegativeValues() {
+		Range t2 = new Range(-8,-8);
+		assertEquals("getUpperBound: Did not return the expected output",-8,t2.getUpperBound(),0.000000001d);	
 	}
+	
+	@Test
+	public void testGetUpperBoundSucceedsWhenBothDifferentPositiveValues() {
+		Range t3 = new Range(3,9);
+		assertEquals("getUpperBound: Did not return the expected output",9,t3.getUpperBound(),0.000000001d);	
+	}
+	@Test
+	public void testGetUpperBoundSucceedsWhenPositiveUpperAndNegativeLowerValues() {
+		Range t4 = new Range(-4,6);
+		assertEquals("getUpperBound: Did not return the expected output",6,t4.getUpperBound(),0.000000001d);	
+	}
+
+	@Test
+	public void testGetUpperBoundSucceedsWhenBothDifferentNegativeValues() {
+		Range t5 = new Range(-7,-3);
+		assertEquals("getUpperBound: Did not return the expected output",-3,t5.getUpperBound(),0.000000001d);	
+	}
+	
+	@Test
+	public void testGetLowerBoundSucceedsWhenBothSamePositiveValues() {
+		Range t1 = new Range(5,5);
+		assertEquals("getLowerBound: Did not return the expected output",5,t1.getUpperBound(),0.000000001d);	
+	}
+	
+	@Test
+	public void testGetLowerBoundSucceedsWhenBothSameNegativeValues() {
+		Range t2 = new Range(-8,-8);
+		assertEquals("getLowerBound: Did not return the expected output",-8,t2.getUpperBound(),0.000000001d);	
+	}
+	
+	@Test
+	public void testGetLowerBoundSucceedsWhenBothDifferentPositiveValues() {
+		Range t3 = new Range(3,9);
+		assertEquals("getLowerBound: Did not return the expected output",3,t3.getUpperBound(),0.000000001d);	
+	}
+	@Test
+	public void testGetLowerBoundSucceedsWhenPositiveUpperAndNegativeLowerValues() {
+		Range t4 = new Range(-4,6);
+		assertEquals("getLowerBound: Did not return the expected output",-4,t4.getUpperBound(),0.000000001d);	
+	}
+
+	@Test
+	public void testGetLowerBoundSucceedsWhenBothDifferentNegativeValues() {
+		Range t5 = new Range(-7,-3);
+		assertEquals("getLowerBound: Did not return the expected output",-7,t5.getUpperBound(),0.000000001d);	
+	}
+
+	
 }
 
