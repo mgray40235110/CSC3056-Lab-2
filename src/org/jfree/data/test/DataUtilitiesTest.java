@@ -39,9 +39,9 @@ public class DataUtilitiesTest extends TestCase {
 		//in order to create a 1d keyed values object we must do this:
 		DefaultKeyedValues testValues1D = new DefaultKeyedValues();
 		values = testValues1D;
-		testValues1D.addValue("0", 5);
-		testValues1D.addValue("1", 9);
-		testValues1D.addValue("2", -2);
+		testValues1D.addValue("0",5);
+		testValues1D.addValue("1",9);
+		testValues1D.addValue("2",2);
 	}
 
 	@After
@@ -70,14 +70,13 @@ public class DataUtilitiesTest extends TestCase {
 	@Test
 	public void testGetCumulativePercentagesNormalValues() {
 		DefaultKeyedValues testCase = new DefaultKeyedValues();
-		testCase.addValue("0",1.0);
-		testCase.addValue("1", 0.875);
-		testCase.addValue("2", 1.0);
-		System.out.println(DataUtilities.getCumulativePercentages(values).getValue("r"));
+		testCase.addValue("0",0.3125);
+		testCase.addValue("1",0.875);
+		testCase.addValue("2",1);
+		System.out.println(DataUtilities.getCumulativePercentages(values).toString());
 		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
-
 	}
-
+	
 	@Test
 	public void testGetCumulativePercentagesNegativeValues() {
 		DefaultKeyedValues testCase = new DefaultKeyedValues();
@@ -86,6 +85,37 @@ public class DataUtilitiesTest extends TestCase {
 		testCase.addValue("2", 1.0);
 		System.out.println(DataUtilities.getCumulativePercentages(values).getValue("r"));
 		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
-
+	}
+	
+	@Test
+	public void testCreateNumberArray() {
+		Number[] z = {1.0,2.0,3.0,4.0};
+		double[] x = {1.0,2.0,3.0,4.0};
+		System.out.println(x);
+		System.out.println(DataUtilities.createNumberArray(x).equals(z));
+		assertEquals("createNumberArray: The expected output is not correct.",z.getClass(),DataUtilities.createNumberArray(x).getClass());
+	}
+	
+	@Test
+	public void testCreateNumberArrayNotNull() {
+		try {
+			DataUtilities.createNumberArray(null);
+			fail("No exception thrown, expected outcome was: InvalidParameterException");
+		}
+		catch (Exception e) {
+			System.out.println(e.getClass());
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(InvalidParameterException.class));
+		}
+	}
+	
+	@Test
+	public void testCreateNumberArray2DNotNull() {
+		try {
+			DataUtilities.createNumberArray2D(null);
+			fail("No exception thrown, expected outcome was : InvalidParameterException");
+		}
+		catch (Exception e) {
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(InvalidParameterException.class));
+			}
 	}
 }

@@ -1,5 +1,7 @@
 package org.jfree.data.test;
 
+import java.security.InvalidParameterException;
+
 import org.jfree.data.Range;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -96,7 +98,31 @@ public class RangeTest extends TestCase {
 		Range t5 = new Range(-7,-3);
 		assertEquals("getLowerBound: Did not return the expected output",-7,t5.getUpperBound(),0.000000001d);	
 	}
-
+	
+	
+	
+	@Test
+	public void testExpandPositiveRange() {
+		Range t1 = new Range(0,8);
+		Range expectedOutput = new Range(-2,10);
+		double upperMargin = 0.25;
+		double lowerMargin = 0.25;
+		assertEquals("Did not return expected output:",expectedOutput,Range.expand(t1, lowerMargin, upperMargin));
+		
+	}
+	
+	@Test
+	public void testExpandFailsWhenNull() {
+		try {
+			Range.expand(null, 0.5,0.5);
+			fail("Exception wasn't thrown: expected output: InvalidParameterException");
+		}
+		catch (Exception e) {
+			System.out.println(e.getClass());
+			assertTrue("Incorrect exception thrown:",e.getClass().equals(InvalidParameterException.class));
+		}
+		
+	}
 	
 }
 
