@@ -63,7 +63,7 @@ public class DataUtilitiesTest extends TestCase {
 		}
 		catch (Exception e)
 		{
-			assertTrue("Incorrect exception type thrown",e.getClass().equals(InvalidParameterException.class));
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
@@ -73,8 +73,10 @@ public class DataUtilitiesTest extends TestCase {
 		testCase.addValue("0",0.3125);
 		testCase.addValue("1",0.875);
 		testCase.addValue("2",1);
-		System.out.println(DataUtilities.getCumulativePercentages(values).toString());
-		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
+		System.out.println(DataUtilities.getCumulativePercentages(values).getValue(0));
+		System.out.println(DataUtilities.getCumulativePercentages(values).getValue(2));
+		assertEquals("Wrong KeyedValues instance returned.",testCase.getValue(0),DataUtilities.getCumulativePercentages(values).getValue(0));
+		assertEquals("Wrong KeyedValues instance returned.",testCase.getValue(2),DataUtilities.getCumulativePercentages(values).getValue(2));
 	}
 	
 	@Test
