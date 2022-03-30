@@ -104,10 +104,31 @@ public class DataUtilitiesTest extends TestCase {
 		}
 		catch (Exception e) {
 			System.out.println(e.getClass());
-			assertTrue("Incorrect exception type thrown",e.getClass().equals(InvalidParameterException.class));
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
+	@Test
+	public void testCreateNumberArrayTypicalValues() {
+		double[] t1 = {1.0,2.0,3.0};
+		Number[] z = {1.0,2.0,3.0};
+		assertEquals("createaNumberArray",z.length,DataUtilities.createNumberArray(t1).length);
+	}
+	
+	@Test
+	public void testCreateNumberArrayEmptyArray() {
+		double[] t1 = {};
+		Number[] z = {};
+		assertEquals("createNumberArray: The expected output is not correct.",z.length,DataUtilities.createNumberArray(t1).length);
+	}
+	
+	/*
+	@Test
+	public void testCreateNumberArrayWith2DInput() {
+		double[][] t1 = {{1.0,2.0},{3.0,4.0}};
+		DataUtilities.createNumberArray(t1);
+	}
+	*/
 	@Test
 	public void testCreateNumberArray2DNotNull() {
 		try {
@@ -115,7 +136,28 @@ public class DataUtilitiesTest extends TestCase {
 			fail("No exception thrown, expected outcome was : InvalidParameterException");
 		}
 		catch (Exception e) {
-			assertTrue("Incorrect exception type thrown",e.getClass().equals(InvalidParameterException.class));
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IllegalArgumentException.class));
 			}
+	}
+	
+	@Test
+	public void testCreateNumberArray2DTypicalValues() {
+		double[][] t1 = {{1.0,2.0},{3.0,4.0}};
+		Number[][] z = {{1.0,2.0},{3.0,4.0}};
+		assertEquals(z.length,DataUtilities.createNumberArray2D(t1).length);
+	}
+	
+	@Test
+	public void testCreateNumberArray2D1DArray() {
+		double[][] t1 = {{1.0,2.0}};
+		Number[][] z = {{1.0,2.0}};
+		assertEquals(z.length,DataUtilities.createNumberArray2D(t1).length);
+	}
+	
+	@Test
+	public void testCreateNumberArray2DEmptyArray() {
+		double[][] t1 = {};
+		Number[][] z = {};
+		assertEquals(z.length,DataUtilities.createNumberArray2D(t1).length);
 	}
 }
