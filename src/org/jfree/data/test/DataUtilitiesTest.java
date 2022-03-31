@@ -73,8 +73,8 @@ public class DataUtilitiesTest extends TestCase {
 		testCase.addValue("0",0.3125);
 		testCase.addValue("1",0.875);
 		testCase.addValue("2",1);
-		System.out.println(DataUtilities.getCumulativePercentages(values).getValue(0));
-		System.out.println(DataUtilities.getCumulativePercentages(values).getValue(2));
+		//System.out.println(DataUtilities.getCumulativePercentages(values).getValue(0));
+		//System.out.println(DataUtilities.getCumulativePercentages(values).getValue(2));
 		assertEquals("Wrong KeyedValues instance returned.",testCase.getValue(0),DataUtilities.getCumulativePercentages(values).getValue(0));
 		assertEquals("Wrong KeyedValues instance returned.",testCase.getValue(2),DataUtilities.getCumulativePercentages(values).getValue(2));
 	}
@@ -82,10 +82,10 @@ public class DataUtilitiesTest extends TestCase {
 	@Test
 	public void testGetCumulativePercentagesNegativeValues() {
 		DefaultKeyedValues testCase = new DefaultKeyedValues();
-		testCase.addValue("0",1.0);
-		testCase.addValue("1", 0.875);
-		testCase.addValue("2", 1.0);
-		System.out.println(DataUtilities.getCumulativePercentages(values).getValue("r"));
+		testCase.addValue("0",-5);
+		testCase.addValue("1",- 9);
+		testCase.addValue("2",-2);
+		System.out.println(DataUtilities.getCumulativePercentages(testCase).getValue("0"));
 		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
 	}
 	
