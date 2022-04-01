@@ -22,8 +22,9 @@ public class DataUtilitiesTest extends TestCase {
 	private Values2D values2D;
 	private Values2D nullExample;
 	private KeyedValues values;
+	private Values2D invalidInputs;
 
-	private static final double DELTA = 0.0000001d;
+	private static final double EPSILON = 0.0000001d;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -46,7 +47,17 @@ public class DataUtilitiesTest extends TestCase {
 		DefaultKeyedValues2D null2DValues = new DefaultKeyedValues2D();
 		nullExample = null2DValues;
 		null2DValues.addValue(null,0,0);
+		null2DValues.addValue(null,0,1);
 		null2DValues.addValue(null,1,0);
+		null2DValues.addValue(null,1,1);
+		/*
+		DefaultKeyedValues2D invalidValues = new DefaultKeyedValues2D();
+		invalidInputs = invalidValues;
+		invalidValues.addValue("a", 0, 0);
+		invalidValues.addValue(5.02,0,1);
+		invalidValues.addValue(true,1,0);
+		invalidValues.addValue(2,1,1);
+		*/
 		
 		//in order to create a 1d keyed values object we must do this:
 		DefaultKeyedValues testValues1D = new DefaultKeyedValues();
@@ -61,44 +72,47 @@ public class DataUtilitiesTest extends TestCase {
 		super.tearDown();
 	}
 	
+	
+
 	@Test
 	public void testDataContainsNullValuesColumnTotal() {
-		assertEquals("Wrong sum returned, should be 0.",0,DataUtilities.calculateColumnTotal(nullExample, 0));
+		assertEquals("Wrong sum returned, should be 0.",0,DataUtilities.calculateColumnTotal(nullExample, 0),EPSILON);
 	}
 	
 	@Test
-	public void testDataContainsNullValuesRowTotal() {
-		assertEquals("Wrong sum returned, should be 0.",0,DataUtilities.calculateRowTotal(nullExample, 0),DELTA);
-	}
-
-	@Test
 	public void testValidDataAndColumnTotal1() {
-		assertEquals("Wrong sum returned. It should be 4.0", 4.0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
+		assertEquals("Wrong sum returned. It should be 4.0", 4.0, DataUtilities.calculateColumnTotal(values2D, 0), EPSILON);
 	}
 	
 	@Test
 	public void testValidDataAndColumnTotal2() {
-		assertEquals("Wrong sum returned, it should be 6.0", 0, DataUtilities.calculateColumnTotal(values2D, -1));
+		assertEquals("Wrong num returned, it should be 6", 6.0, DataUtilities.calculateColumnTotal(values2D, 1),EPSILON);
 	}
 	
 	@Test
 	public void testValidDataAndOutsidePositiveIndexColumnTotal() {
+		assertEquals("Wrong value returned. Should be 0 as column index has invalid input.",0.0,DataUtilities.calculateColumnTotal(values2D, 2));
+		/*
 		try {
 			DataUtilities.calculateColumnTotal(values2D, 2);
 			fail("No exception thrown: expected output was a thrown exception of type: IndexOutOfBounds");
 		} catch(Exception e) {
 			assertTrue("Incorrect exception type thrown",e.getClass().equals(IndexOutOfBoundsException.class));
 		}
+		*/
 	}
 	
 	@Test
 	public void testValidDataAndNegativeIndexColumnTotal() {
+		assertEquals("Wrong value returned. Should be 0 as column index has invalid input.",0.0,DataUtilities.calculateColumnTotal(values2D, -1));
+		/*
 		try {
 			DataUtilities.calculateColumnTotal(values2D, -1);
 			fail("No exception thrown: expected output was a thrown exception of type: IndexOutOfBoundsException");
 		} catch(Exception e) {
 			assertTrue("Incorrect exception type thrown",e.getClass().equals(IndexOutOfBoundsException.class));
 		}
+		*/
 	}
 	
 	@Test
@@ -112,6 +126,66 @@ public class DataUtilitiesTest extends TestCase {
 		}
 	}
 	
+	
+	
+	
+
+	
+	@Test
+	public void testValidDataAndRowTotal1() {
+		assertEquals("Wrong sum returned. It should be 3.0", 3.0, DataUtilities.calculateRowTotal(values2D, 0), EPSILON);
+	}
+	
+	@Test
+	public void testValidDataAndRowTotal2() {
+		assertEquals("Wrong num returned, it should be 7", 7.0, DataUtilities.calculateRowTotal(values2D, 1),EPSILON);
+	}
+	
+	@Test
+	public void testValidDataAndOutsidePositiveIndexRowTotal() {
+		assertEquals("Wrong value returned. Should be 0 as column index has invalid input.",0.0,DataUtilities.calculateRowTotal(values2D, 2));
+		/*
+		try {
+			DataUtilities.calculateColumnTotal(values2D, 2);
+			fail("No exception thrown: expected output was a thrown exception of type: IndexOutOfBounds");
+		} catch(Exception e) {
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IndexOutOfBoundsException.class));
+		}
+		*/
+	}
+	
+	@Test
+	public void testValidDataAndNegativeIndexRowTotal() {
+		assertEquals("Wrong value returned. Should be 0 as column index has invalid input.",0.0,DataUtilities.calculateRowTotal(values2D, -1));
+		/*
+		try {
+			DataUtilities.calculateColumnTotal(values2D, -1);
+			fail("No exception thrown: expected output was a thrown exception of type: IndexOutOfBoundsException");
+		} catch(Exception e) {
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IndexOutOfBoundsException.class));
+		}
+		*/
+	}
+	
+	@Test
+	public void testNullDataValidRowTotal() {
+		try {
+			DataUtilities.calculateRowTotal(null, 0);
+			fail("No exception thrown, expected outcome was: a thrown exception of type: IllegalArgumentException");
+		} catch(Exception e) {
+			//System.out.println(e.getClass());
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IllegalArgumentException.class));
+		}
+	}
+
+	@Test
+	public void testDataContainsNullValuesRowTotal() {
+		assertEquals("Wrong sum returned, should be 0.",0,DataUtilities.calculateRowTotal(nullExample, 0),EPSILON);
+	}
+	
+	
+	//getCumulativePercentagesTests
+
 	@Test
 	public void testGetCumulativePercentagesNotNull() {
 		try
@@ -147,12 +221,9 @@ public class DataUtilitiesTest extends TestCase {
 		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
 	}
 	
-	@Test
-	public void testCreateNumberArray() {
-		Number[] z = {1.0,2.0,3.0,4.0};
-		double[] x = {1.0,2.0,3.0,4.0};
-		assertEquals("createNumberArray: The expected output is not correct.",z.getClass(),DataUtilities.createNumberArray(x).getClass());
-	}
+	
+	//createNumberArray tests
+
 	
 	@Test
 	public void testCreateNumberArrayNotNull() {
@@ -166,11 +237,23 @@ public class DataUtilitiesTest extends TestCase {
 	}
 	
 	@Test
-	public void testCreateNumberArrayTypicalValues() {
+	public void testCreateNumberArrayTypicalValues1() {
 		double[] t1 = {1.0,2.0,3.0};
-		Number[] z = {1.0,2.0,3.0};
-		assertEquals("createNumberArray",z[2],DataUtilities.createNumberArray(t1)[2]);
-		assertEquals("createaNumberArray",z.length,DataUtilities.createNumberArray(t1).length);
+		Number[] expectedOutput = {1.0,2.0,3.0};
+		Number[] testCase = DataUtilities.createNumberArray(t1);
+		for (int i = 0; i<t1.length;i++) {
+			assertEquals("values at this index does not match",expectedOutput[i],testCase[i]);
+		}
+	}
+	
+	@Test
+	public void testCreateNumberArrayTypicalValues2() {
+		double[] t1 = {-1.0,-1.1,3.0,88.0,0.0};
+		Number[] expectedOutput = {-1.0,-1.1,3.0,88.0,0.0};
+		Number[] testCase = DataUtilities.createNumberArray(t1);
+		for (int i = 0; i<t1.length;i++) {
+			assertEquals("values at this index does not match",expectedOutput[i],testCase[i]);
+		}
 	}
 	
 	@Test
@@ -187,6 +270,11 @@ public class DataUtilitiesTest extends TestCase {
 		DataUtilities.createNumberArray(t1);
 	}
 	*/
+	
+	
+	//createNumberArray2D Tests
+	
+	
 	@Test
 	public void testCreateNumberArray2DNotNull() {
 		try {
@@ -201,15 +289,24 @@ public class DataUtilitiesTest extends TestCase {
 	@Test
 	public void testCreateNumberArray2DTypicalValues() {
 		double[][] t1 = {{1.0,2.0},{3.0,4.0}};
-		Number[][] z = {{1.0,2.0},{3.0,4.0}};
-		assertEquals(z.length,DataUtilities.createNumberArray2D(t1).length);
+		Number[][] expectedOutput = {{1.0,2.0},{3.0,4.0}};
+		Number[][] testCase= DataUtilities.createNumberArray2D(t1);
+		for (int i=0 ; i<t1.length;i++) {
+			for (int j = 0; j<t1.length;j++) {
+				System.out.println(i + " " + j);
+				assertEquals("values at this index does not match",expectedOutput[i][j],testCase[i][j]);
+			}
+		}
 	}
 	
 	@Test
-	public void testCreateNumberArray2D1DArray() {
+	public void testCreateNumberArray2D1DArrayInput() {
 		double[][] t1 = {{1.0,2.0}};
-		Number[][] z = {{1.0,2.0}};
-		assertEquals(z.length,DataUtilities.createNumberArray2D(t1).length);
+		Number[][] expectedOutput = {{1.0,2.0}};
+		Number[][] testCase = DataUtilities.createNumberArray2D(t1);
+		for (int i = 0; i< t1[0].length; i++) {
+			assertEquals("values at this index do not match.",expectedOutput[0][i],testCase[0][i]);
+		}
 	}
 	
 	@Test
