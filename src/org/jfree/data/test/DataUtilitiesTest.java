@@ -221,6 +221,29 @@ public class DataUtilitiesTest extends TestCase {
 		assertEquals("Wrong KeyedValues instance returned.",testCase,DataUtilities.getCumulativePercentages(values));
 	}
 	
+	@Test
+	public void testGetCumulativePercentagesNullValue() {
+		DefaultKeyedValues testCase = new DefaultKeyedValues();
+		testCase.addValue("0",null);
+		assertEquals("Wrong KeyedValues instance returned.",null,DataUtilities.getCumulativePercentages(testCase).getValue(0));
+	
+		//System.out.println(DataUtilities.getCumulativePercentages(testCase).getValue("0"));
+	}
+	
+	@Test
+	public void testGetCumulativePercentagesEmptyInstance() {
+		DefaultKeyedValues testCase = new DefaultKeyedValues();	
+		try
+		{
+			DataUtilities.getCumulativePercentages(testCase);
+			fail("No exception thrown, expect outcome was: a thrown exception of type: InvalidParameterException");
+		}
+		catch (Exception e)
+		{
+			assertTrue("Incorrect exception type thrown",e.getClass().equals(IllegalArgumentException.class));
+		}
+	}
+	
 	
 	//createNumberArray tests
 
